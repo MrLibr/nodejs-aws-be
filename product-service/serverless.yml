@@ -1,0 +1,40 @@
+org: mrlibr
+app: be-nodejs-aws
+service: product-service
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'   # Name of webpack configuration file
+    includeModules: true   # Node modules configuration for packaging
+    packager: 'npm'   # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
+
+package:
+  individually: true
+  patterns:
+    - "!*"
+    - "!*/**"
+    - dist/**
+
+functions:
+  app:
+    handler: dist/index.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+  getAllProduct:
+    handler: dist/index.handler
+    events:
+      - http: 'GET /products'
+  getProductById:
+    handler: dist/index.handler
+    events:
+      - http: 'GET /product/{proxy+}'
