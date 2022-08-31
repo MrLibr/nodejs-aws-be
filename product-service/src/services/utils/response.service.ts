@@ -13,6 +13,8 @@ export class ResponseService {
     body: any,
     statusCode: number = HTTPStatuses.SUCCESS
   ): Response {
-    return res.status(statusCode).json(body);
+    return res
+      .status(statusCode)
+      .json(body);
   }
 }
