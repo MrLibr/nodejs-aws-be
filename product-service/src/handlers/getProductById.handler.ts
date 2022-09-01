@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { HTTPStatuses } from '../constants';
+
+import { HandlerTypes, HTTPStatuses, LoggerConstants, ResponseConstants } from '../constants';
 
 import { ResponseService, ProductDBService, LOGGER } from '../services';
 
@@ -12,14 +13,14 @@ export const getProductById = async (req: Request, res: Response) => {
     const product = productService.getProductById(id);
 
     if (!product) {
-      LOGGER.warn(`[getProductById] Product undefined`);
-      return responceService.createBadResponce(res, 'No result');
+      LOGGER.warn(`${HandlerTypes.GET_PRODUCT_DY_ID_HANDLER} ${LoggerConstants.PRODUCT_NOT_FOUND}`);
+      return responceService.createBadResponce(res, ResponseConstants.NO_RESULTS);
     }
 
-    LOGGER.info(`[getProductById] return response`);
+    LOGGER.info(`${HandlerTypes.GET_PRODUCT_DY_ID_HANDLER} ${LoggerConstants.RESPONSE_WAS_CREATED}`);
     return responceService.createResponce(res, product);
   } catch (error) {
-    LOGGER.error(`[getProductById] ${error}`);
-    return responceService.createResponce(res, 'Some server error.', HTTPStatuses.SERVER_ERROR);
+    LOGGER.error(`${HandlerTypes.GET_PRODUCT_DY_ID_HANDLER} ${error}`);
+    return responceService.createResponce(res, ResponseConstants.SERVER_ERROR, HTTPStatuses.SERVER_ERROR);
   }
 };

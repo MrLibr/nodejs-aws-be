@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { HTTPStatuses } from '../constants';
 
 import { ResponseService, ProductDBService, LOGGER } from '../services';
+
+import { HandlerTypes, HTTPStatuses, LoggerConstants, ResponseConstants } from '../constants';
 
 export const getAllProducts = async (req: Request, res: Response) => {
   const responceService = new ResponseService();
@@ -11,14 +12,14 @@ export const getAllProducts = async (req: Request, res: Response) => {
     const allProducts = productService.getAllProducts();
 
     if (!allProducts) {
-      LOGGER.warn(`[getAllProduct] DB is Empty`);
-      return responceService.createBadResponce(res, 'No result');
+      LOGGER.warn(`${HandlerTypes.GET_ALL_PRODUCT_HANDLER} ${LoggerConstants.DB_IS_EMPTY}`);
+      return responceService.createBadResponce(res, ResponseConstants.NO_RESULTS);
     }
 
-    LOGGER.info(`[getAllProduct] return response`);
+    LOGGER.info(`${HandlerTypes.GET_ALL_PRODUCT_HANDLER} ${LoggerConstants.RESPONSE_WAS_CREATED} `);
     return responceService.createResponce(res, allProducts);
   } catch (error) {
-    LOGGER.error(`[getAllProduct] ${error}`);
-    return responceService.createResponce(res, 'Some server error.', HTTPStatuses.SERVER_ERROR);
+    LOGGER.error(`${HandlerTypes.GET_ALL_PRODUCT_HANDLER} ${error}`);
+    return responceService.createResponce(res, ResponseConstants.SERVER_ERROR, HTTPStatuses.SERVER_ERROR);
   }
 };
