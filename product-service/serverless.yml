@@ -9,6 +9,7 @@ provider:
 
 plugins:
   - serverless-webpack
+  - serverless-offline
 
 custom:
   webpack:
@@ -16,6 +17,8 @@ custom:
     includeModules: true   # Node modules configuration for packaging
     packager: 'npm'   # Packager that will be used to package your external modules
     excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
+  serverless-offline:
+    httpPort: 3900
 
 package:
   individually: true
