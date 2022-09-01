@@ -2,21 +2,19 @@ import { Request, Response } from 'express';
 
 import { ResponseService, LOGGER, ProductService } from '../services';
 import { HandlerTypes, HTTPStatuses, LoggerConstants, ResponseConstants } from '../constants';
+import { Product } from '../entities';
 
-export const getAllProducts = async (req: Request, res: Response) => {
+export const addNewProduct = async (req: Request, res: Response) => {
+  const newProduct: Product = req.body;
+
   const responceService = new ResponseService();
   const productService = new ProductService();
 
   try {
-    const allProducts = await productService.getAllProduct();
+    const createdProduct = await productService.addProduct(newProduct);
 
-    if (!allProducts) {
-      LOGGER.warn(`${HandlerTypes.GET_ALL_PRODUCT_HANDLER} ${LoggerConstants.DB_IS_EMPTY}`);
-      return responceService.createBadResponce(res, ResponseConstants.NO_RESULTS);
-    }
-
-    LOGGER.info(`${HandlerTypes.GET_ALL_PRODUCT_HANDLER} ${LoggerConstants.RESPONSE_WAS_CREATED} `);
-    return responceService.createResponce(res, allProducts);
+    LOGGER.info(`${HandlerTypes.ADD_NEW_PRODUCT} ${LoggerConstants.PRODUCT_WAS_CREATED_SUCCESSFUL} `);
+    return responceService.createResponce(res, createdProduct);
   } catch (error) {
     LOGGER.error(`${HandlerTypes.GET_ALL_PRODUCT_HANDLER} ${error}`);
     return responceService.createResponce(res, ResponseConstants.SERVER_ERROR, HTTPStatuses.SERVER_ERROR);

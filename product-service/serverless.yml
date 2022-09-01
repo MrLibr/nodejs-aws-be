@@ -9,6 +9,7 @@ provider:
 
 plugins:
   - serverless-webpack
+  - serverless-dotenv-plugin
   - serverless-offline
 
 custom:
@@ -40,4 +41,8 @@ functions:
   getProductById:
     handler: dist/index.handler
     events:
-      - http: 'GET /product/{proxy+}'
+      - http: 'GET /products/{proxy+}'
+  addNewProduct:
+    handler: dist/index.handler
+    events:
+      - http: 'POST /add-product'
