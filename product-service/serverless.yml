@@ -8,6 +8,7 @@ provider:
   runtime: nodejs14.x
 
 plugins:
+  - serverless-dotenv-plugin
   - serverless-webpack
   - serverless-offline
 
@@ -40,4 +41,8 @@ functions:
   getProductById:
     handler: dist/index.handler
     events:
-      - http: 'GET /product/{proxy+}'
+      - http: 'GET /products/{proxy+}'
+  addNewProduct:
+    handler: dist/index.handler
+    events:
+      - http: 'POST /add-product'

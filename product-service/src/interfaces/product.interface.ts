@@ -1,6 +1,6 @@
 import { Currency } from './currency.interface';
 
-export interface ITea {
+export interface IProduct {
   id: string;
   title: string;
   description: string;

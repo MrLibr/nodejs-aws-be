@@ -1,15 +1,14 @@
 import { Request, Response } from 'express';
 
-import { ResponseService, ProductDBService, LOGGER } from '../services';
-
+import { ResponseService, LOGGER, ProductService } from '../services';
 import { HandlerTypes, HTTPStatuses, LoggerConstants, ResponseConstants } from '../constants';
 
 export const getAllProducts = async (req: Request, res: Response) => {
   const responceService = new ResponseService();
+  const productService = new ProductService();
 
   try {
-    const productService = new ProductDBService();
-    const allProducts = productService.getAllProducts();
+    const allProducts = await productService.getAllProduct();
 
     if (!allProducts) {
       LOGGER.warn(`${HandlerTypes.GET_ALL_PRODUCT_HANDLER} ${LoggerConstants.DB_IS_EMPTY}`);

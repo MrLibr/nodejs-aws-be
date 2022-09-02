@@ -4,7 +4,7 @@
   "description": "Product Service",
   "main": "index.js",
   "scripts": {
-    "start:offline": "sls offline start",
+    "start:offline": "npm run build && sls offline start",
     "build": "tsc",
     "deploy": "serverless deploy",
     "remove": "serverless remove",
@@ -25,15 +25,19 @@
   "dependencies": {
     "body-parser": "^1.20.0",
     "express": "^4.17.1",
+    "pg": "^8.8.0",
+    "reflect-metadata": "^0.1.13",
     "serverless": "^3.22.0",
+    "serverless-dotenv-plugin": "^4.0.2",
     "serverless-http": "^2.7.0",
-    "uuid": "^8.3.2",
+    "typeorm": "^0.3.9",
     "winston": "^3.8.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/jest": "^29.0.0",
-    "@types/uuid": "^8.3.4",
+    "@types/node": "^18.7.14",
+    "@types/pg": "^8.6.5",
     "@types/winston": "^2.4.4",
     "jest": "^29.0.1",
     "serverless-offline": "^9.3.1",
