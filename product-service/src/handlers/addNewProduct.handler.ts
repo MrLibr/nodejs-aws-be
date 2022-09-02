@@ -5,12 +5,20 @@ import { HandlerTypes, HTTPStatuses, LoggerConstants, ResponseConstants } from '
 import { Product } from '../entities';
 
 export const addNewProduct = async (req: Request, res: Response) => {
-  const newProduct: Product = req.body;
+  const {title, description, img, currency, price, count} = req.body;
 
   const responceService = new ResponseService();
   const productService = new ProductService();
 
   try {
+    const newProduct = new Product();
+
+    newProduct.title = title;
+    newProduct.description = description;
+    newProduct.img = img;
+    newProduct.currency = currency;
+    newProduct.price = price;
+
     const createdProduct = await productService.addProduct(newProduct);
 
     LOGGER.info(`${HandlerTypes.ADD_NEW_PRODUCT} ${LoggerConstants.PRODUCT_WAS_CREATED_SUCCESSFUL} `);

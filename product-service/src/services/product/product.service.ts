@@ -1,32 +1,34 @@
-import { Repository, DeleteResult } from 'typeorm';
+import { DeleteResult } from 'typeorm';
 
-import { ProductDB } from '../../data-access';
+import { ProductServiceDB } from '../../data-access';
 import { Product } from '../../entities';
 
 
 export class ProductService {
 
-  private productRepository: Repository<Product>;
-  private productDB: ProductDB;
+  private productServiceDB: ProductServiceDB;
 
   constructor() {
-    this.productDB = new ProductDB();
-    this.productRepository = this.productDB.getProductRepository();
+    this.productServiceDB = new ProductServiceDB();
   }
 
-  public addProduct(product: Product): Promise<Product> {
-    return this.productRepository.save(product);
+  public async addProduct(product: Product): Promise<Product> {
+    const productRepository = await this.productServiceDB.getProductRepository()
+    return productRepository.save(product);
   }
 
-  public deleteProductById(id: string): Promise<DeleteResult> {
-    return this.productRepository.delete({ id });
+  public async deleteProductById(id: string): Promise<DeleteResult> {
+    const productRepository = await this.productServiceDB.getProductRepository()
+    return productRepository.delete({ id });
   }
 
-  public getProductById(id: string): Promise<Product | null> {
-    return this.productRepository.findOneBy({ id });
+  public async getProductById(id: string): Promise<Product | null> {
+    const productRepository = await this.productServiceDB.getProductRepository()
+    return productRepository.findOneBy({ id });
   }
 
-  public getAllProduct(): Promise<Product[]> {
-    return this.productRepository.find();
+  public async getAllProduct(): Promise<Product[]> {
+    const productRepository = await this.productServiceDB.getProductRepository()
+    return productRepository.find();
   }
 }

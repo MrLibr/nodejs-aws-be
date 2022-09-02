@@ -1,2 +1,2 @@
-export { Product } from './product.entities';
-export { Stock } from './stock.entries';
+export { Product } from './product.entity';
+export { Stock } from './stock.entity';

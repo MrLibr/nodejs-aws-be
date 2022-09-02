@@ -6,6 +6,8 @@ import { ResponseService, ProductService, LOGGER } from '../services';
 
 export const getProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
+  console.log(id);
+
 
   const responceService = new ResponseService();
   const productService = new ProductService();
@@ -16,7 +18,7 @@ export const getProductById = async (req: Request, res: Response) => {
       return responceService.createResponce(res, ResponseConstants.BAD_PARAMETRES, HTTPStatuses.BAD_REQUEST);
     }
 
-    const product = productService.getProductById(id);
+    const product = await productService.getProductById(id);
 
     if (!product) {
       LOGGER.warn(`${HandlerTypes.GET_PRODUCT_DY_ID_HANDLER} ${LoggerConstants.PRODUCT_NOT_FOUND}`);

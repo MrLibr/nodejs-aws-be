@@ -8,8 +8,8 @@ provider:
   runtime: nodejs14.x
 
 plugins:
-  - serverless-webpack
   - serverless-dotenv-plugin
+  - serverless-webpack
   - serverless-offline
 
 custom:

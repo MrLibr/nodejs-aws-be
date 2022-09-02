@@ -1,1 +1,1 @@
-export { ProductDB } from './product.db';
+export { ProductServiceDB } from './product.db';
