@@ -28,7 +28,6 @@ export class ProductServiceDB {
   }
 
   private async getRepository(entity: any): Promise<Repository<any>> {
-    console.log(AppDataSource.isInitialized);
     if (!AppDataSource.isInitialized) {
       await this.initConnection();
     }

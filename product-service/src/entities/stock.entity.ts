@@ -1,16 +1,16 @@
 import { Product } from './product.entity';
 import { Entity, Column, JoinColumn, OneToOne, BaseEntity, PrimaryGeneratedColumn } from "typeorm"
 
-@Entity()
+@Entity({name: 'stock'})
 export class Stock extends BaseEntity {
-  @PrimaryGeneratedColumn({ type: 'int' })
+  @PrimaryGeneratedColumn({type: 'int'})
   id!: string;
 
-  @Column({ type: 'int' })
+  @Column({type: 'int'})
   count!: number;
 
   @OneToOne(() => Product)
-  @JoinColumn({ name: "product_id" })
+  @JoinColumn({name: "product_id"})
   product!: Product;
 
 }
