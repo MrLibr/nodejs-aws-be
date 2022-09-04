@@ -10,7 +10,7 @@ export class ImportService {
   private s3Service: AWS.S3;
 
   constructor(private config: IAWSClientConfiguration) {
-    this.s3Service = new AWS.S3({ region: this.config.region, signatureVersion: 'v4' });
+    this.s3Service = new AWS.S3({ region: this.config.region });
   }
 
   public getS3ImportSignedUrl(filePath: string): Promise<string> {

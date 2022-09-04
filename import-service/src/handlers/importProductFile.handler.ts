@@ -18,7 +18,7 @@ export const importProductsFile = async (req: Request, res: Response) => {
       region: String(env.AWS_REGION),
     });
 
-    const filePath = `${FoldersConstants.UPLOADED}${fileName}`;
+    const filePath = `${FoldersConstants.UPLOADED}/${fileName}`;
     const signedUrl = await importService.getS3ImportSignedUrl(filePath);
 
     LOGGER.info(`${HandlerTypes.IMPORT_PRODUCTS_FILE} ${LoggerConstants.IMPORT_SUCCEEDED} ${signedUrl}`);

@@ -1,4 +1,4 @@
 export enum FoldersConstants {
-  UPLOADED = 'uploaded/',
-  PARSED = 'parsed/',
+  UPLOADED = 'uploaded',
+  PARSED = 'parsed',
 }
