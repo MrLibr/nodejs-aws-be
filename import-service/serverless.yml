@@ -1,6 +1,6 @@
 org: mrlibr
 app: be-nodejs-aws
-service: product-service
+service: import-service
 frameworkVersion: '3'
 
 provider:
@@ -11,6 +11,18 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-webpack
   - serverless-offline
+
+iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+      Resource:
+        - "arn:aws:s3:::${env:AWS_IMPORT_BUCKET}"
+    - Effect: "Allow"
+      Action:
+        - "s3:*"
+      Resource:
+        - "arn:aws:s3:::${env:AWS_IMPORT_BUCKET}/*"
 
 custom:
   webpack:
@@ -29,15 +41,21 @@ package:
     - dist/**
 
 functions:
-  getAllProduct:
+  importProductsFile:
     handler: dist/index.handler
     events:
-      - http: 'GET /products'
-  getProductById:
+      - http: 'GET /import'
+        request:
+            parameters:
+              querystrings:
+                name: true
+  importFileParser:
     handler: dist/index.handler
     events:
-      - http: 'GET /products/{proxy+}'
-  addNewProduct:
-    handler: dist/index.handler
-    events:
-      - http: 'POST /add-product'
+      - s3:
+          bucket: ${env:AWS_IMPORT_BUCKET}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+            - suffix: .csv
+          existing: true
