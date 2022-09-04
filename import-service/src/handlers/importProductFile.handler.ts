@@ -15,7 +15,7 @@ export const importProductsFile = async (req: Request, res: Response) => {
   try {
     const importService = new ImportService({
       bucketName: String(env.AWS_IMPORT_BUCKET),
-      region: String(env.AWS_REGION),
+      region: String(env.BE_AWS_REGION),
     });
 
     const filePath = `${FoldersConstants.UPLOADED}/${fileName}`;
