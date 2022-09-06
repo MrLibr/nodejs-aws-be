@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryColumn, BaseEntity } from "typeorm"
 
 @Entity({name: 'product'})
 export class Product extends BaseEntity {
-  @PrimaryColumn({type: 'uuid'})
+  @PrimaryColumn({type: 'uuid', generated: 'uuid'})
   id!: string;
 
   @Column({type: "text"})

@@ -16,7 +16,7 @@ CREATE TABLE stock (
   id uuid primary key DEFAULT uuid_generate_v4(),
   product_id uuid,
   count integer,
-  foreign key ("product_id") references "products" ("id") on delete cascade
+  foreign key ("product_id") references "product" ("id") on delete cascade
 );
 
 INSERT INTO product(id, title, description, img, currency, price)
