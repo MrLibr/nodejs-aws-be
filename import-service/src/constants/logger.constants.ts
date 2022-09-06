@@ -7,4 +7,5 @@ export enum LoggerConstants {
   MOVE_UPLOADED_FILE = 'Move uploaded file to parsed folder',
   FILE_WAS_MOVED = 'File was moved to parsed folder',
   SUCCESS = 'Success',
+  PUBLISH_MESSAGE = 'Publish message to queue: ',
 }

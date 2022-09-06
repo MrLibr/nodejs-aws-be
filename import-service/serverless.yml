@@ -3,9 +3,15 @@ app: be-nodejs-aws
 service: import-service
 frameworkVersion: '3'
 
+useDotenv: true
+
 provider:
   name: aws
+  stage: dev
   runtime: nodejs14.x
+  environment:
+    CATALOG_ITEMS_QUEUE:
+      Ref: ItemsQueue
 
 plugins:
   - serverless-dotenv-plugin
@@ -17,12 +23,16 @@ iamRoleStatements:
       Action:
         - "s3:ListBucket"
       Resource:
-        - "arn:aws:s3:::products-imports"
+        - "arn:aws:s3:::${env:AWS_IMPORT_BUCKET}"
     - Effect: "Allow"
       Action:
         - "s3:*"
       Resource:
-        - "arn:aws:s3:::products-imports/*"
+        - "arn:aws:s3:::${env:AWS_IMPORT_BUCKET}/*"
+    - Effect: 'Allow'
+      Action: 'sqs:*'
+      Resource:
+        - Fn::GetAtt: [ CATALOG_ITEMS_QUEUE, Arn ]
 
 custom:
   webpack:
@@ -32,6 +42,13 @@ custom:
     excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
   serverless-offline:
     httpPort: 3900
+
+resources:
+  Resources:
+    ItemsQueue:
+        Type: 'AWS::SQS::Queue'
+        Properties:
+          QueueName: '${env:SQS_QUEUE_NAME}'
 
 package:
   individually: true
@@ -44,7 +61,9 @@ functions:
   importProductsFile:
     handler: dist/index.handler
     events:
-      - http: 'GET /import'
+      - http:
+          method: GET
+          path: '/import'
         request:
             parameters:
               querystrings:
@@ -53,13 +72,12 @@ functions:
     handler: dist/handlers/index.importFileParser
     events:
       - s3:
-          bucket: products-imports
+          bucket: ${env:AWS_IMPORT_BUCKET}
           event: s3:ObjectCreated:*
           rules:
             - prefix: uploaded/
             - suffix: .csv
           existing: true
-
     GatewayResponseDefault4xx:
       Type: AWS::ApiGateway::GatewayResponse
       Properties:

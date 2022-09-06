@@ -23,7 +23,7 @@ export class ProductServiceDB {
     return this.getRepository(Product);
   }
 
-  public async getStockRepository(): Promise<Repository<Product>> {
+  public async getStockRepository(): Promise<Repository<Stock>> {
     return this.getRepository(Stock);
   }
 

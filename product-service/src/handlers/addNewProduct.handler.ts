@@ -7,7 +7,7 @@ import { Product } from '../entities';
 export const addNewProduct = async (req: Request, res: Response) => {
   const {title, description, img, currency, price, count} = req.body;
 
-  const responceService = new ResponseService();
+  const responseService = new ResponseService();
   const productService = new ProductService();
 
   try {
@@ -22,9 +22,9 @@ export const addNewProduct = async (req: Request, res: Response) => {
     const createdProduct = await productService.addProduct(newProduct);
 
     LOGGER.info(`${HandlerTypes.ADD_NEW_PRODUCT} ${LoggerConstants.PRODUCT_WAS_CREATED_SUCCESSFUL} `);
-    return responceService.createResponce(res, createdProduct);
+    return responseService.createResponce(res, createdProduct);
   } catch (error) {
     LOGGER.error(`${HandlerTypes.GET_ALL_PRODUCT_HANDLER} ${error}`);
-    return responceService.createResponce(res, ResponseConstants.SERVER_ERROR, HTTPStatuses.SERVER_ERROR);
+    return responseService.createResponce(res, ResponseConstants.SERVER_ERROR, HTTPStatuses.SERVER_ERROR);
   }
 };

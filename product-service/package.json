@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/MrLibr/nodejs-aws-be#readme",
   "dependencies": {
+    "aws-sdk": "^2.1209.0",
     "body-parser": "^1.20.0",
     "express": "^4.17.1",
     "pg": "^8.8.0",

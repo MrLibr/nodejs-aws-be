@@ -3,14 +3,28 @@ app: be-nodejs-aws
 service: product-service
 frameworkVersion: '3'
 
+useDotenv: true
+
 provider:
   name: aws
+  stage: dev
   runtime: nodejs14.x
+  environment:
+    SNS_TOPIC:
+      Ref: SNSTopic
 
 plugins:
   - serverless-dotenv-plugin
   - serverless-webpack
   - serverless-offline
+
+iamRoleStatements:
+    - Effect: 'Allow'
+      Action: 'sqs:*'
+      Resource: '${env:SQS_QUEUE_ARN}'
+    - Effect: 'Allow'
+      Action: 'sns:*'
+      Resource: '${env:SNS_TOPIC_ARN}'
 
 custom:
   webpack:
@@ -28,16 +42,54 @@ package:
     - "!*/**"
     - dist/**
 
+resources:
+    Resources:
+      SNSTopic:
+        Type: 'AWS::SNS::Topic'
+        Properties:
+          TopicName: '${env:SNS_TOPIC_NAME}'
+      SNSSubscriptionForCurrencyType:
+        Type: 'AWS::SNS::Subscription'
+        Properties:
+          Endpoint: '${env:SNS_SUBSCRIPTION_ID_FOR_CURRENCY_TYPE}'
+          Protocol: 'email'
+          TopicArn:
+            Ref: SNSTopic
+          FilterPolicy:
+            currency:
+              - BYN
+      SNSSubscriptionForPrice:
+        Type: 'AWS::SNS::Subscription'
+        Properties:
+          Endpoint: '${env:SNS_SUBSCRIPTION_ID_FOR_PRICE}'
+          Protocol: 'email'
+          TopicArn:
+            Ref: SNSTopic
+          FilterPolicy:
+            price: [{"numeric": [">=", 12]}]
+
 functions:
   getAllProduct:
     handler: dist/index.handler
     events:
-      - http: 'GET /products'
+      - http:
+          method: GET
+          path: '/products'
   getProductById:
     handler: dist/index.handler
     events:
-      - http: 'GET /products/{proxy+}'
+      - http:
+          method: GET
+          path: '/products/{proxy+}'
   addNewProduct:
     handler: dist/index.handler
     events:
-      - http: 'POST /add-product'
+      - http:
+          method: POST
+          path: '/add-product'
+  catalogBatchProcess:
+    handler: dist/handlers/index.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: ${env:SQS_QUEUE_BATCH_SIZE}
+          arn: ${env:SQS_QUEUE_ARN}
